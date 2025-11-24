@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import Editor from "react-simple-wysiwyg";
 
 const AddNote = ({ notes, setNotes, categories }) => {
     const navigate = useNavigate();
-
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState(categories[0] || "");
     const [content, setContent] = useState("");
@@ -33,28 +34,36 @@ const AddNote = ({ notes, setNotes, categories }) => {
                 <h3 className="mb-4">Add Note</h3>
 
                 <div className="card p-4 shadow-sm">
-                    <label className="fw-semibold">Title</label>
-                    <input className="form-control mb-3" placeholder="Give your note a title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-
-                    <label className="fw-semibold">Category</label>
-                    <select className="form-select mb-3" value={category} onChange={(e) => setCategory(e.target.value)} required>
-                        {categories.length > 0 ? (
-                            categories.map((cat, index) => (
-                                <option key={index} value={cat}>
+                    {/* <input className="form-control mb-3" placeholder="Give your note a title" value={title} onChange={(e) => setTitle(e.target.value)} required /> */}
+                    <TextField id="outlined-basic" label="Title" variant="outlined" className="form-control mb-3" placeholder="Give your note a title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                    {/* <select className="form-select mb-3" value={category} onChange={(e) => setCategory(e.target.value)} required>
+                            {categories.length > 0 ? (
+                                categories.map((cat, index) => (
+                                    <option key={index} value={cat}>
+                                        {cat}
+                                    </option>
+                                ))
+                            ) : (
+                                <option>No categories found</option>
+                            )}
+                        </select> */}
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                        <Select labelId="demo-simple-select-label" id="demo-simple-select" value={category} label="Category" onChange={(e) => setCategory(e.target.value)} required>
+                            <MenuItem value={"All"}>All Categories</MenuItem>
+                            {categories.map((cat, i) => (
+                                <MenuItem key={i} value={cat}>
                                     {cat}
-                                </option>
-                            ))
-                        ) : (
-                            <option>No categories found</option>
-                        )}
-                    </select>
-
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <label className="fw-semibold">Content</label>
-                    <textarea className="form-control mb-4" rows="6" placeholder="Add your note content" value={content} onChange={(e) => setContent(e.target.value)} required />
-
-                    <div className="d-flex gap-3">
+                    {/* <textarea className="form-control mb-4" rows="6" placeholder="Add your note content" value={content} onChange={(e) => setContent(e.target.value)} required /> */}
+                    <Editor containerProps={{ style: { resize: "vertical", height: "300px" } }} value={content} onChange={(e) => setContent(e.target.value)} />
+                    <div className="d-flex gap-3 mt-3">
                         <button type="submit" className="btn btn-primary">
-                            Save Note
+                            Add Note
                         </button>
                         <Link to="/" className="btn btn-outline-secondary">
                             Cancel

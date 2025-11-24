@@ -1,5 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import Editor from "react-simple-wysiwyg";
 
 const EditNote = ({ notes, setNotes, categories }) => {
     const { id } = useParams();
@@ -9,6 +11,7 @@ const EditNote = ({ notes, setNotes, categories }) => {
     const [category, setCategory] = useState("");
     const [content, setContent] = useState("");
 
+    // Load the note values when page opens
     useEffect(() => {
         const noteToEdit = notes.find((n) => n.id.toString() === id);
 
@@ -35,22 +38,26 @@ const EditNote = ({ notes, setNotes, categories }) => {
                 <h3 className="mb-4">Edit Note</h3>
 
                 <div className="card p-4 shadow-sm">
-                    <label className="fw-semibold">Title</label>
-                    <input className="form-control mb-3" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                    {/* Title */}
+                    <TextField label="Title" variant="outlined" className="form-control mb-3" value={title} onChange={(e) => setTitle(e.target.value)} required />
 
-                    <label className="fw-semibold">Category</label>
-                    <select className="form-select mb-3" value={category} onChange={(e) => setCategory(e.target.value)} required>
-                        {categories.map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
-                    </select>
+                    {/* Category */}
+                    <FormControl fullWidth className="mb-3">
+                        <InputLabel id="category-label">Category</InputLabel>
+                        <Select labelId="category-label" value={category} label="Category" onChange={(e) => setCategory(e.target.value)} required>
+                            {categories.map((cat, i) => (
+                                <MenuItem key={i} value={cat}>
+                                    {cat}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
 
+                    {/* Content */}
                     <label className="fw-semibold">Content</label>
-                    <textarea className="form-control mb-4" rows="6" value={content} onChange={(e) => setContent(e.target.value)} required />
+                    <Editor containerProps={{ style: { resize: "vertical", height: "300px" } }} value={content} onChange={(e) => setContent(e.target.value)} />
 
-                    <div className="d-flex gap-3">
+                    <div className="d-flex gap-3 mt-3">
                         <button type="submit" className="btn btn-primary">
                             Save Changes
                         </button>
